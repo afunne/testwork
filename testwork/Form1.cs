@@ -36,28 +36,28 @@ namespace testwork
 
         private void InitializeControls()
         {
-            this.Text = "Math Quiz";
+            this.Text = "Matemaatika viktoriin";
             this.Size = new Size(500, 450);
             this.Font = new Font("Segoe UI", 10);
 
             // Difficulty selector
-            Label diffLabel = new Label { Text = "Difficulty:", Location = new Point(20, 20), AutoSize = true };
+            Label diffLabel = new Label { Text = "Raskus:", Location = new Point(20, 20), AutoSize = true };
             this.Controls.Add(diffLabel);
 
             difficultyComboBox = new ComboBox { Location = new Point(100, 20), DropDownStyle = ComboBoxStyle.DropDownList, Width = 100 };
-            difficultyComboBox.Items.AddRange(new string[] { "Easy", "Normal", "Hard" });
+            difficultyComboBox.Items.AddRange(new string[] { "Lihtne", "Normaalne", "Raske" });
             difficultyComboBox.SelectedIndex = 1;
             this.Controls.Add(difficultyComboBox);
 
             // Timer label
-            Label timeTextLabel = new Label { Text = "Time Left:", Location = new Point(220, 20), AutoSize = true };
+            Label timeTextLabel = new Label { Text = "Jäänud aeg:", Location = new Point(220, 20), AutoSize = true };
             this.Controls.Add(timeTextLabel);
 
             timeLabel = new Label { Text = "0", Location = new Point(300, 20), AutoSize = true, Font = new Font("Segoe UI", 14, FontStyle.Bold) };
             this.Controls.Add(timeLabel);
 
             // Start button
-            startButton = new Button { Text = "Start Quiz", Location = new Point(380, 15), Size = new Size(90, 30) };
+            startButton = new Button { Text = "Alusta viktoriini", Location = new Point(370, 20), Size = new Size(90, 30) };
             startButton.Click += startButton_Click;
             this.Controls.Add(startButton);
 
@@ -74,11 +74,11 @@ namespace testwork
             this.Controls.Add(quizPanel);
 
             // Previous/Next buttons
-            prevButton = new Button { Text = "Previous", Location = new Point(50, 370), Size = new Size(100, 35) };
+            prevButton = new Button { Text = "Eelmine", Location = new Point(50, 370), Size = new Size(100, 35) };
             prevButton.Click += PrevBtn_Click;
             this.Controls.Add(prevButton);
 
-            nextButton = new Button { Text = "Next", Location = new Point(200, 370), Size = new Size(100, 35) };
+            nextButton = new Button { Text = "Järgmine", Location = new Point(200, 370), Size = new Size(100, 35) };
             nextButton.Click += NextBtn_Click;
             this.Controls.Add(nextButton);
 
@@ -107,10 +107,10 @@ namespace testwork
 
         private void ConfigureQuiz()
         {
-            string pagesInput = Interaction.InputBox("How many pages of math problems do you want?", "Quiz Configuration", "1");
+            string pagesInput = Interaction.InputBox("Kui palju lehekülgi matemaatikaülesandeid soovite?", "Viktoriini konfiguratsioon", "1");
             if (!int.TryParse(pagesInput, out totalPages) || totalPages < 1) totalPages = 1;
 
-            string timeInput = Interaction.InputBox("Set total time for the quiz in seconds:", "Quiz Configuration", "120");
+            string timeInput = Interaction.InputBox("Määrake küsitluse koguaeg sekundites:", "Viktoriini konfiguratsioon", "60");
             if (!int.TryParse(timeInput, out totalTime) || totalTime < 5) totalTime = 120;
 
             timeLeft = totalTime;
@@ -177,9 +177,9 @@ namespace testwork
             }
 
             prevButton.Visible = pageIndex > 0;
-            nextButton.Text = pageIndex == totalPages - 1 ? "Finish" : "Next";
+            nextButton.Text = pageIndex == totalPages - 1 ? "Lõpetada" : "Järgmine";
 
-            timeLabel.Text = timeLeft + " seconds";
+            timeLabel.Text = timeLeft + "";
             timeLabel.ForeColor = timeLeft <= 10 ? Color.Red : Color.Black;
 
             currentPage = pageIndex;
@@ -190,7 +190,7 @@ namespace testwork
             if (timeLeft > 0)
             {
                 timeLeft--;
-                timeLabel.Text = timeLeft + " seconds";
+                timeLabel.Text = timeLeft + "";
                 if (timeLeft <= 10) timeLabel.ForeColor = Color.Red;
             }
             else
@@ -226,7 +226,7 @@ namespace testwork
         {
             timer1.Stop();
             int score = 0;
-            string message = "Results:\n\n";
+            string message = "Tulemused:\n\n";
 
             for (int i = 0; i < totalProblems; i++)
             {
@@ -244,11 +244,11 @@ namespace testwork
                 answerBoxes[i].BackColor = correct ? Color.LightGreen : Color.LightCoral;
 
                 message += $"{operand1[i]} {operators[i]} {operand2[i]} = {answerBoxes[i].Value} " +
-                           $"({correctAnswer}) → {(correct ? "Correct" : "Wrong")}\n";
+                           $"({correctAnswer}) → {(correct ? "Õige" : "Vale")}\n";
             }
 
-            message += $"\nScore: {score}/{totalProblems}";
-            MessageBox.Show(message, "Quiz Results");
+            message += $"\nPunkti: {score}/{totalProblems}";
+            MessageBox.Show(message, "Viktoriini tulemused");
 
             startButton.Enabled = true;
             difficultyComboBox.Enabled = true;
